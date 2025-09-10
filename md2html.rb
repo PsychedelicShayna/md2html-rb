@@ -30,18 +30,9 @@ markdown_renderer = Redcarpet::Markdown.new(
 
 html_output = markdown_renderer.render(input.read)
 name = input.is_a?(File) && File.basename(input) || "<stdin>"
-gh_markdown_css_filename = File.join(ENV["XDG_CACHE_HOME"] || "#{ENV['HOME']}/.cache", "gfm-render/github-markdown.css")
 
-unless File.exist?(gh_markdown_css_filename)
-  require 'net/http'
-  require 'pathname'
-  CSS_URL = 'https://raw.githubusercontent.com/sindresorhus/github-markdown-css/main/github-markdown.css'
-  STDERR.puts "Download #{CSS_URL} and cache to #{gh_markdown_css_filename}"
-  Pathname.new(gh_markdown_css_filename).dirname.mkpath
-  File.open(gh_markdown_css_filename, "w") do |css|
-    css.write(Net::HTTP.get(URI(CSS_URL)))
-  end
-end
+gh_markdown_css_filename = "github-markdown.css"
+
 gh_markdown_css = File.read(gh_markdown_css_filename)
 
 erb = ERB.new(DATA.read)
